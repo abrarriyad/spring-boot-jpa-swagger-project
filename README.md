@@ -27,7 +27,7 @@ Again you will need to have minimum JDK8 available at you PATH variable. If you 
 **Run the application**
 
 ~~~
-java -jar target/springboot-assignment-telenor.jar
+java -jar target/spring-boot-jpa-swagger-app.jar
 ~~~
 
 It's an spring boot application. So, I can be run with spring-boot-maven plug-in like below
