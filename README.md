@@ -4,7 +4,7 @@
 To build a docker image with the package, that has been generated at the previous step following command is necessary from command line.
 ~~~
 docker build -t spring-boot-jpa-swagger-app .
-
+~~~
 **Run the Docker image**
 
 To run the newly created image command is give.  
@@ -19,7 +19,7 @@ Pull docker image: docker pull rabrar/spring-boot-jpa-swagger-app.jar
 To run the prebuild image -
 ~~~
 docker run -p 8080:8080 rabrar/spring-boot-jpa-swagger-app.jar:latest
-
+~~~
 or, using docker-compose
 ```
 docker-compose up -d
