@@ -74,6 +74,7 @@ docker-compose up -d
 ```
 There is also another docker compose file for development purpose.
 
+
 **Build/Run with docker-compose**
 
 To, build the  docker image and run it with docker-compose simply execute this command below
@@ -81,6 +82,7 @@ To, build the  docker image and run it with docker-compose simply execute this c
 ```
  docker-compose -f docker-compose.yml up -d
 ```
+
 There is also another docker compose file for development purpose.
 
 ```
