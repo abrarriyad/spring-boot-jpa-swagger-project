@@ -1,12 +1,60 @@
 
+## Prerequisite
+
+You should have following tools installed in your system to run the application
+
+- jdk-1.8.0
+
+- maven 3.6.3 (Optional. Requires, if you don't use mvnw/docker)
+
+- docker (Optional. Requires, if run with docker)
+
+- docker-compose (Optional. Requires, if run with docker-compose)
+
+
+**Build the application with Maven**
+
+It's a maven based application, To build the application following command need to be run from command line.
+~~~
+mvn package
+~~~
+or
+~~~
+mvnw package
+~~~
+Again you will need to have minimum JDK8 available at you PATH variable. If you don't have JDK8 installed please follow the docker build section 2.
+
+**Run the application**
+
+~~~
+java -jar target/spring-boot-jpa-swagger-app.jar
+~~~
+
+It's an spring boot application. So, I can be run with spring-boot-maven plug-in like below
+
+```
+./mvnw spring-boot:run
+```
 **Build the Docker image**
 
+- S1.
 To build a docker image with the package, that has been generated at the previous step following command is necessary from command line.
 ~~~
 docker build -t spring-boot-jpa-swagger-app .
 ~~~
-**Run the Docker image**
+- S2.
 
+**[Multi-stage](https://docs.docker.com/develop/develop-images/multistage-build/) Docker build: (Everything using docker)**
+
+It's a great way to ensure builds are 100% reproducible AND as lean as possible. On the downside a Maven build in Docker may have to download many dependencies each time it runs. But RUN’ing the `dependency:go-offline` goal, this will download most* of the dependencies required for the build and cache them for as long as the `pom.xml` **doesn’t change**.
+
+At file DockerfileBuildWIthMavenImage is has been illustrated how to build the package from this project source code with maven docker image and then build the docker image. 
+Its pretty helpful if no JDK is installed in the system. Only dependency is docker. Following is the command -
+
+~~~
+docker build -t spring-boot-jpa-swagger-app -f DockerfileBuildWIthMavenImage .
+~~~
+**Run the Docker image**
 To run the newly created image command is give.  
 ~~~
 docker run -p 8080:8080 spring-boot-jpa-swagger-app
