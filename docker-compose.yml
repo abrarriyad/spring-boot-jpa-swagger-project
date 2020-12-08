@@ -1,0 +1,6 @@
+version: '3.7'
+services:
+  web:
+    image: rabrar/spring-boot-jpa-swagger-app.jar
+    ports:
+      - "8080:8080"
