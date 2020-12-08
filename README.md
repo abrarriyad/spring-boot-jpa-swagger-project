@@ -13,7 +13,7 @@ docker run -p 8080:8080 spring-boot-jpa-swagger-app
 ~~~
 NB: Need to make sure, the port 8080 is free.
 ~~~
-Pull docker image: docker pull rabrar/spring-boot-jpa-swagger-app.jar
+pull docker image: docker pull rabrar/spring-boot-jpa-swagger-app.jar
 ~~~
 
 To run the prebuild image -
