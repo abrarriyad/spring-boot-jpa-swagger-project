@@ -81,6 +81,11 @@ To, build the  docker image and run it with docker-compose simply execute this c
 ```
  docker-compose -f docker-compose.yml up -d
 ```
+There is also another docker compose file for development purpose.
+
+```
+ docker-compose -f docker-compose.dev.yml up -d
+```
 
 It's will first build the image with the docker context, Then run the app in 8080 port
 

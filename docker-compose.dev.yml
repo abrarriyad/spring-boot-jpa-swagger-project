@@ -1,0 +1,10 @@
+
+version: '3.7'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: DockerfileBuildWIthMavenImage
+    image: rabrar/spring-boot-jpa-swagger-app.jar
+    ports:
+      - "8080:8080"
