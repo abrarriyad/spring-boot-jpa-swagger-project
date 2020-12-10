@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookServiceImpl  implements BookService{
@@ -18,14 +17,16 @@ public class BookServiceImpl  implements BookService{
 
 
     @Override
-    public Optional<Book> getBook(int id) {
-        return bookRepository.findById(id);
+    public Book getBook(int id) {
+        return bookRepository.findById(id).orElse(null);
+
     }
 
     @Override
     public void addBook(Book book) {
 
         bookRepository.save(book);
+
     }
 
     @Override

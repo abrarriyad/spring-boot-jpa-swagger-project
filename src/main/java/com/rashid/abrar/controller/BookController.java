@@ -1,21 +1,23 @@
 package com.rashid.abrar.controller;
 
-import com.rashid.abrar.model.Book;
-import com.rashid.abrar.model.JournalBook;
-import com.rashid.abrar.model.StoryBook;
-import com.rashid.abrar.model.ThesisBook;
+import com.rashid.abrar.dto.AddJournalBookDTO;
+import com.rashid.abrar.dto.AddStoryBookDTO;
+import com.rashid.abrar.dto.AddThesisBookDTO;
+import com.rashid.abrar.model.*;
+import com.rashid.abrar.service.AuthorService;
 import com.rashid.abrar.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class BookController {
 
     @Autowired
     private BookService bookService;
+    @Autowired
+    private AuthorService authorService;
 
     @GetMapping("/books")
     public List<Book>  getAllBooks(){
@@ -23,41 +25,86 @@ public class BookController {
     }
 
     @GetMapping("/books/{id}")
-    public Optional<Book> getBookById(@PathVariable int id){
+    public Book getBookById(@PathVariable int id){
         return  bookService.getBook(id);
     }
 
-    @PostMapping("/books/story")
-    public void addStoryBook(@RequestBody StoryBook storyBook){
-        bookService.addBook(storyBook);
+    @PostMapping("/books/story/{author_id}")
+    public void addStoryBook(@PathVariable int author_id, @RequestBody AddStoryBookDTO storyBook){
+        Author author =  authorService.getAuthorById(author_id);
+        StoryBook sb = new StoryBook();
+        sb.setId(storyBook.getId());
+        sb.setGenre(storyBook.getGenre());
+        sb.setTitle(storyBook.getTitle());
+
+        sb.setAuthor(author);
+
+        bookService.addBook(sb);
+
+
     }
-    @PostMapping("/books/thesis")
-    public void addThesisBook(@RequestBody ThesisBook thesisBook){
-        bookService.addBook(thesisBook);
+
+    @PostMapping("/books/thesis/{author_id}")
+    public void addThesisBook(@PathVariable int author_id, @RequestBody AddThesisBookDTO thesisBook){
+        Author author = authorService.getAuthorById(author_id);
+        ThesisBook tb = new ThesisBook();
+
+        tb.setId(thesisBook.getId());
+        tb.setTopic(thesisBook.getTopic());
+        tb.setTitle(thesisBook.getTitle());
+        tb.setAuthor(author);
+
+        bookService.addBook(tb);
     }
-    @PostMapping("/books/journal")
-    public void addJournalBook(@RequestBody JournalBook journalBook){
-        bookService.addBook(journalBook);
+
+    @PostMapping("/books/journal/{author_id}")
+    public void addJournalBook(@PathVariable int author_id, @RequestBody AddJournalBookDTO journalBook){
+
+        Author author = authorService.getAuthorById(author_id);
+        JournalBook jb = new JournalBook();
+        jb.setId(journalBook.getId());
+        jb.setPublisher(journalBook.getPublisher());
+        jb.setTitle(journalBook.getTitle());
+        jb.setAuthor(author);
+
+        bookService.addBook(jb);
     }
+
 
 
 
     @PutMapping("/books/story/{id}")
-    public void updateStoryBook(@PathVariable int id, @RequestBody StoryBook book){
-        book.setId(id);
-        bookService.updateBook(id,book);
+    public void updateStoryBook(@PathVariable int id, @RequestBody AddStoryBookDTO book){
+
+        StoryBook sb = (StoryBook) bookService.getBook(id);
+
+        sb.setTitle(book.getTitle());
+        sb.setGenre(book.getGenre());
+        sb.setId(book.getId());
+
+        bookService.updateBook(id,sb);
     }
 
     @PutMapping("/books/thesis/{id}")
-    public void updateThesisBook(@PathVariable int id, @RequestBody ThesisBook book){
-        book.setId(id);
-        bookService.updateBook(id,book);
+    public void updateThesisBook(@PathVariable int id, @RequestBody AddThesisBookDTO book){
+
+        ThesisBook tb = (ThesisBook) bookService.getBook(id);
+
+        tb.setTitle(book.getTitle());
+        tb.setTopic(book.getTopic());
+        tb.setId(book.getId());
+        bookService.updateBook(id,tb);
     }
 
     @PutMapping("/books/journal/{id}")
-    public void updateJournalBook(@PathVariable int id, @RequestBody JournalBook book){
-        book.setId(id);
-        bookService.updateBook(id,book);
+    public void updateJournalBook(@PathVariable int id, @RequestBody AddJournalBookDTO book){
+
+        JournalBook jb = (JournalBook) bookService.getBook(id);
+
+        jb.setTitle(book.getTitle());
+        jb.setPublisher(book.getPublisher());
+        jb.setId(book.getId());
+        bookService.updateBook(id,jb);
     }
 
 
