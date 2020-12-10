@@ -6,7 +6,7 @@ import com.rashid.abrar.model.Book;
 import lombok.Data;
 
 
-public class AddStoryBookDTO {
+public class StoryBookDTO {
 
     private int id;
 

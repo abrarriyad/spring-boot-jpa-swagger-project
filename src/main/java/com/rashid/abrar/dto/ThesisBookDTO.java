@@ -1,7 +1,7 @@
 package com.rashid.abrar.dto;
 
 
-public class AddJournalBookDTO {
+public class ThesisBookDTO {
 
     private int id;
 
@@ -14,7 +14,7 @@ public class AddJournalBookDTO {
     }
 
     private String title;
-    private String publisher;
+    private String topic;
 
 
     public String getTitle() {
@@ -25,11 +25,11 @@ public class AddJournalBookDTO {
         this.title = title;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }

@@ -1,8 +1,8 @@
 package com.rashid.abrar.controller;
 
-import com.rashid.abrar.dto.AddJournalBookDTO;
-import com.rashid.abrar.dto.AddStoryBookDTO;
-import com.rashid.abrar.dto.AddThesisBookDTO;
+import com.rashid.abrar.dto.JournalBookDTO;
+import com.rashid.abrar.dto.StoryBookDTO;
+import com.rashid.abrar.dto.ThesisBookDTO;
 import com.rashid.abrar.model.*;
 import com.rashid.abrar.service.AuthorService;
 import com.rashid.abrar.service.BookService;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/book")
 @RestController
 public class BookController {
 
@@ -19,18 +20,18 @@ public class BookController {
     @Autowired
     private AuthorService authorService;
 
-    @GetMapping("/books")
+    @GetMapping("/all")
     public List<Book>  getAllBooks(){
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/books/{id}")
+    @GetMapping("/{id}")
     public Book getBookById(@PathVariable int id){
         return  bookService.getBook(id);
     }
 
-    @PostMapping("/books/story/{author_id}")
-    public void addStoryBook(@PathVariable int author_id, @RequestBody AddStoryBookDTO storyBook){
+    @PostMapping("/story/add/{author_id}")
+    public void addStoryBook(@PathVariable int author_id, @RequestBody StoryBookDTO storyBook){
         Author author =  authorService.getAuthorById(author_id);
         StoryBook sb = new StoryBook();
         sb.setId(storyBook.getId());
@@ -44,8 +45,8 @@ public class BookController {
 
     }
 
-    @PostMapping("/books/thesis/{author_id}")
-    public void addThesisBook(@PathVariable int author_id, @RequestBody AddThesisBookDTO thesisBook){
+    @PostMapping("/thesis/add/{author_id}")
+    public void addThesisBook(@PathVariable int author_id, @RequestBody ThesisBookDTO thesisBook){
         Author author = authorService.getAuthorById(author_id);
         ThesisBook tb = new ThesisBook();
 
@@ -57,8 +58,8 @@ public class BookController {
         bookService.addBook(tb);
     }
 
-    @PostMapping("/books/journal/{author_id}")
-    public void addJournalBook(@PathVariable int author_id, @RequestBody AddJournalBookDTO journalBook){
+    @PostMapping("/journal/add/{author_id}")
+    public void addJournalBook(@PathVariable int author_id, @RequestBody JournalBookDTO journalBook){
 
         Author author = authorService.getAuthorById(author_id);
         JournalBook jb = new JournalBook();
@@ -73,8 +74,8 @@ public class BookController {
 
 
 
-    @PutMapping("/books/story/{id}")
-    public void updateStoryBook(@PathVariable int id, @RequestBody AddStoryBookDTO book){
+    @PutMapping("/story/update/{id}")
+    public void updateStoryBook(@PathVariable int id, @RequestBody StoryBookDTO book){
 
         StoryBook sb = (StoryBook) bookService.getBook(id);
 
@@ -85,8 +86,8 @@ public class BookController {
         bookService.updateBook(id,sb);
     }
 
-    @PutMapping("/books/thesis/{id}")
-    public void updateThesisBook(@PathVariable int id, @RequestBody AddThesisBookDTO book){
+    @PutMapping("/thesis/update/{id}")
+    public void updateThesisBook(@PathVariable int id, @RequestBody ThesisBookDTO book){
 
         ThesisBook tb = (ThesisBook) bookService.getBook(id);
 
@@ -96,8 +97,8 @@ public class BookController {
         bookService.updateBook(id,tb);
     }
 
-    @PutMapping("/books/journal/{id}")
-    public void updateJournalBook(@PathVariable int id, @RequestBody AddJournalBookDTO book){
+    @PutMapping("/journal/update/{id}")
+    public void updateJournalBook(@PathVariable int id, @RequestBody JournalBookDTO book){
 
         JournalBook jb = (JournalBook) bookService.getBook(id);
 
@@ -108,7 +109,7 @@ public class BookController {
     }
 
 
-    @DeleteMapping("/books/{id}")
+    @DeleteMapping("/remove/{id}")
     public void deleteBook(@PathVariable int id){
          bookService.deleteBook(id);
     }
