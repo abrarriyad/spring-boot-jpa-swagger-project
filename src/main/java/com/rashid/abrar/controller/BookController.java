@@ -1,8 +1,8 @@
 package com.rashid.abrar.controller;
 
-import com.rashid.abrar.dto.AddJournalBookDTO;
-import com.rashid.abrar.dto.AddStoryBookDTO;
-import com.rashid.abrar.dto.AddThesisBookDTO;
+import com.rashid.abrar.dto.JournalBookDTO;
+import com.rashid.abrar.dto.StoryBookDTO;
+import com.rashid.abrar.dto.ThesisBookDTO;
 import com.rashid.abrar.model.*;
 import com.rashid.abrar.service.AuthorService;
 import com.rashid.abrar.service.BookService;
@@ -31,7 +31,7 @@ public class BookController {
     }
 
     @PostMapping("/story/add/{author_id}")
-    public void addStoryBook(@PathVariable int author_id, @RequestBody AddStoryBookDTO storyBook){
+    public void addStoryBook(@PathVariable int author_id, @RequestBody StoryBookDTO storyBook){
         Author author =  authorService.getAuthorById(author_id);
         StoryBook sb = new StoryBook();
         sb.setId(storyBook.getId());
@@ -46,7 +46,7 @@ public class BookController {
     }
 
     @PostMapping("/thesis/add/{author_id}")
-    public void addThesisBook(@PathVariable int author_id, @RequestBody AddThesisBookDTO thesisBook){
+    public void addThesisBook(@PathVariable int author_id, @RequestBody ThesisBookDTO thesisBook){
         Author author = authorService.getAuthorById(author_id);
         ThesisBook tb = new ThesisBook();
 
@@ -59,7 +59,7 @@ public class BookController {
     }
 
     @PostMapping("/journal/add/{author_id}")
-    public void addJournalBook(@PathVariable int author_id, @RequestBody AddJournalBookDTO journalBook){
+    public void addJournalBook(@PathVariable int author_id, @RequestBody JournalBookDTO journalBook){
 
         Author author = authorService.getAuthorById(author_id);
         JournalBook jb = new JournalBook();
@@ -75,7 +75,7 @@ public class BookController {
 
 
     @PutMapping("/story/update/{id}")
-    public void updateStoryBook(@PathVariable int id, @RequestBody AddStoryBookDTO book){
+    public void updateStoryBook(@PathVariable int id, @RequestBody StoryBookDTO book){
 
         StoryBook sb = (StoryBook) bookService.getBook(id);
 
@@ -87,7 +87,7 @@ public class BookController {
     }
 
     @PutMapping("/thesis/update/{id}")
-    public void updateThesisBook(@PathVariable int id, @RequestBody AddThesisBookDTO book){
+    public void updateThesisBook(@PathVariable int id, @RequestBody ThesisBookDTO book){
 
         ThesisBook tb = (ThesisBook) bookService.getBook(id);
 
@@ -98,7 +98,7 @@ public class BookController {
     }
 
     @PutMapping("/journal/update/{id}")
-    public void updateJournalBook(@PathVariable int id, @RequestBody AddJournalBookDTO book){
+    public void updateJournalBook(@PathVariable int id, @RequestBody JournalBookDTO book){
 
         JournalBook jb = (JournalBook) bookService.getBook(id);
 

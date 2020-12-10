@@ -1,7 +1,7 @@
 package com.rashid.abrar.controller;
 
 
-import com.rashid.abrar.dto.AddAuthorDTO;
+import com.rashid.abrar.dto.AuthorDTO;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.service.AuthorService;
@@ -37,7 +37,7 @@ public class AuthorController {
     }
 
     @PostMapping("/add")
-    public void addAuthor(@RequestBody AddAuthorDTO auth){
+    public void addAuthor(@RequestBody AuthorDTO auth){
 
         Author author = new Author();
 
@@ -54,7 +54,7 @@ public class AuthorController {
     }
 
     @PutMapping("/update/{author_id}")
-    public Author updateAuthor(@PathVariable int author_id, @RequestBody AddAuthorDTO author){
+    public Author updateAuthor(@PathVariable int author_id, @RequestBody AuthorDTO author){
 
         Author auth = authorService.getAuthorById(author_id);
 

@@ -2,7 +2,7 @@ package com.rashid.abrar.dto;
 
 
 
-public class AddAuthorDTO {
+public class AuthorDTO {
 
 
     private int id;
