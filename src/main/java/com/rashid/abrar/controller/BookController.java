@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/book")
 @RestController
 public class BookController {
 
@@ -19,17 +20,17 @@ public class BookController {
     @Autowired
     private AuthorService authorService;
 
-    @GetMapping("/books")
+    @GetMapping("/all")
     public List<Book>  getAllBooks(){
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/books/{id}")
+    @GetMapping("/{id}")
     public Book getBookById(@PathVariable int id){
         return  bookService.getBook(id);
     }
 
-    @PostMapping("/books/story/{author_id}")
+    @PostMapping("/story/add/{author_id}")
     public void addStoryBook(@PathVariable int author_id, @RequestBody AddStoryBookDTO storyBook){
         Author author =  authorService.getAuthorById(author_id);
         StoryBook sb = new StoryBook();
@@ -44,7 +45,7 @@ public class BookController {
 
     }
 
-    @PostMapping("/books/thesis/{author_id}")
+    @PostMapping("/thesis/add/{author_id}")
     public void addThesisBook(@PathVariable int author_id, @RequestBody AddThesisBookDTO thesisBook){
         Author author = authorService.getAuthorById(author_id);
         ThesisBook tb = new ThesisBook();
@@ -57,7 +58,7 @@ public class BookController {
         bookService.addBook(tb);
     }
 
-    @PostMapping("/books/journal/{author_id}")
+    @PostMapping("/journal/add/{author_id}")
     public void addJournalBook(@PathVariable int author_id, @RequestBody AddJournalBookDTO journalBook){
 
         Author author = authorService.getAuthorById(author_id);
@@ -73,7 +74,7 @@ public class BookController {
 
 
 
-    @PutMapping("/books/story/{id}")
+    @PutMapping("/story/update/{id}")
     public void updateStoryBook(@PathVariable int id, @RequestBody AddStoryBookDTO book){
 
         StoryBook sb = (StoryBook) bookService.getBook(id);
@@ -85,7 +86,7 @@ public class BookController {
         bookService.updateBook(id,sb);
     }
 
-    @PutMapping("/books/thesis/{id}")
+    @PutMapping("/thesis/update/{id}")
     public void updateThesisBook(@PathVariable int id, @RequestBody AddThesisBookDTO book){
 
         ThesisBook tb = (ThesisBook) bookService.getBook(id);
@@ -96,7 +97,7 @@ public class BookController {
         bookService.updateBook(id,tb);
     }
 
-    @PutMapping("/books/journal/{id}")
+    @PutMapping("/journal/update/{id}")
     public void updateJournalBook(@PathVariable int id, @RequestBody AddJournalBookDTO book){
 
         JournalBook jb = (JournalBook) bookService.getBook(id);
@@ -108,7 +109,7 @@ public class BookController {
     }
 
 
-    @DeleteMapping("/books/{id}")
+    @DeleteMapping("/remove/{id}")
     public void deleteBook(@PathVariable int id){
          bookService.deleteBook(id);
     }
