@@ -1,5 +1,7 @@
 package com.rashid.abrar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,14 +9,36 @@ import javax.persistence.*;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Entity
-public class Book {
+public  class Book {
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "book_id")
+//    private int id;
+
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int pk;
 
+    @Column(unique = true)
+    private int id;
     private String title;
-    private String author;
+
+
+    @OneToOne(targetEntity = Author.class)
+    private Author author;
+
+
+    public Author getAuthor() {
+        return author;
+    }
+
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 
     public int getId() {
         return id;
@@ -32,11 +56,6 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+
 }
