@@ -1,14 +1,13 @@
 package com.rashid.abrar.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.List;
 
 @Entity
-
 public class Author {
 
     @Id

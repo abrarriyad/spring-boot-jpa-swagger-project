@@ -9,7 +9,7 @@ public interface AuthorService {
 
     void addAuthor(Author author);
     void removeAuthor(int id);
-    List<Author> getAllAuthors();
+    List<Author> getAllAuthors(int pageNo, int pageSize,String sortBy);
     List<Book> getAllBooksByAuthorId(int id);
     Author getAuthorById(int id);
     Author updateAuthor(Author author);

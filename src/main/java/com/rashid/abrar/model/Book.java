@@ -8,14 +8,9 @@ import javax.persistence.*;
 
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Entity
-public  class Book {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "book_id")
-//    private int id;
-
+public abstract class Book {
 
     @Id
     @JsonIgnore
@@ -56,6 +51,6 @@ public  class Book {
         this.title = title;
     }
 
-
+    public abstract String getType();
 
 }

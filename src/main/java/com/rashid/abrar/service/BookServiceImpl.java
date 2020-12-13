@@ -3,6 +3,9 @@ package com.rashid.abrar.service;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,10 +33,13 @@ public class BookServiceImpl  implements BookService{
     }
 
     @Override
-    public List<Book> getAllBooks() {
+    public List<Book> getAllBooks(int pageNo,int pageSize, String sortBy) {
+
+        Pageable paging = PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
+
         List<Book> books = new ArrayList<>();
 
-        bookRepository.findAll()
+        bookRepository.findAll(paging)
                 .forEach(books::add);
         return books;
     }

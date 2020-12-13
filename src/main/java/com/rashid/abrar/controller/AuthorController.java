@@ -2,16 +2,27 @@ package com.rashid.abrar.controller;
 
 
 import com.rashid.abrar.dto.AuthorDTO;
+import com.rashid.abrar.dto.AuthorUpdateDTO;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.service.AuthorService;
 import com.rashid.abrar.service.BookService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
-@RequestMapping("/author")
+import static com.rashid.abrar.util.Constants.*;
+import static com.rashid.abrar.util.Constants.INTERNAL_SERVER_ERROR;
+
+@RequestMapping(value = "/author", produces = { MediaType.APPLICATION_JSON_VALUE })
 @RestController
 public class AuthorController {
 
@@ -21,49 +32,128 @@ public class AuthorController {
     @Autowired
     BookService bookService;
 
-    @GetMapping("/all")
-    public List<Author> getAllAuthors(){
-        return authorService.getAllAuthors();
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    @GetMapping("/")
+    @ApiOperation(
+            value = "Get All Authors",
+            notes = "Get All Authors information.",
+            response = Author.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
+            @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
+            @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
+            @ApiResponse(code = 404, message = BAD_REQUEST),
+            @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
+
+    })
+    public List<Author> getAllAuthors(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy
+    ){
+        return authorService.getAllAuthors(pageNo,pageSize,sortBy);
     }
 
+
+
     @GetMapping("/{id}")
-    public Author getAuthorById(@PathVariable int id){
+    @ApiOperation(
+            value = "Get Author",
+            notes = "Get Author information by author Id",
+            response = Author.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
+            @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
+            @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
+            @ApiResponse(code = 404, message = BAD_REQUEST),
+            @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
+    })
+    public Author getAuthorById(@Min(1) @PathVariable int id){
         return  authorService.getAuthorById(id);
     }
 
+
     @GetMapping("/{id}/books")
-    public List<Book> getAllBooksByAuthorId(@PathVariable int id){
+    @ApiOperation(
+            value = "Get All Books by an Author",
+            notes = "Get All Books by an Author by author Id",
+            response = Author.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
+            @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
+            @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
+            @ApiResponse(code = 404, message = BAD_REQUEST),
+            @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
+    })
+    public List<Book> getAllBooksByAuthorId(@Min(1) @PathVariable int id){
         return authorService.getAllBooksByAuthorId(id);
     }
 
-    @PostMapping("/add")
-    public void addAuthor(@RequestBody AuthorDTO auth){
 
-        Author author = new Author();
+    @PostMapping("/")
+    @ApiOperation(
+            value = "Add New Author",
+            notes = "Add New Author",
+            response = Author.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
+            @ApiResponse(code = 404, message = BAD_REQUEST),
+            @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
+    })
+    public void addAuthor(@Valid @RequestBody AuthorDTO authorDTO){
 
-        author.setId(auth.getId());
-        author.setName(auth.getName());
-        author.setEmail(auth.getEmail());
+        Author author = modelMapper.map(authorDTO, Author.class);
 
         authorService.addAuthor(author);
     }
 
-    @DeleteMapping("/remove/{id}")
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(
+            value = "Delete Author",
+            notes = "Delete Author by Id ",
+            response = Author.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
+            @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
+            @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
+            @ApiResponse(code = 404, message = BAD_REQUEST),
+            @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
+    })
     public void removeAuthor(@PathVariable int id){
         authorService.removeAuthor(id);
     }
 
-    @PutMapping("/update/{author_id}")
-    public Author updateAuthor(@PathVariable int author_id, @RequestBody AuthorDTO author){
 
-        Author auth = authorService.getAuthorById(author_id);
+    @PutMapping("/{id}")
+    @ApiOperation(
+            value = "Update Author",
+            notes = "Update Author information by author Id",
+            response = Author.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
+            @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
+            @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
+            @ApiResponse(code = 404, message = BAD_REQUEST),
+            @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
+    })
+    public Author updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
 
-        auth.setId(author.getId());
-        auth.setEmail(author.getEmail());
-        auth.setName(author.getEmail());
-        auth.setBooks(authorService.getAllBooksByAuthorId(author_id));
+        Author author = authorService.getAuthorById(id);
 
-        return authorService.updateAuthor(auth);
+        if(authorDTO.getEmail() !=null){
+            author.setEmail(authorDTO.getEmail());
+        }
+
+        if(authorDTO.getEmail() !=null) {
+            author.setName(authorDTO.getName());
+        }
+        author.setBooks(authorService.getAllBooksByAuthorId(id));
+
+        return authorService.updateAuthor(author);
     }
 
 }
