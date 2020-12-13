@@ -3,10 +3,12 @@ package com.rashid.abrar.service;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.repository.AuthorRepository;
-import com.rashid.abrar.repository.CommonRepository;
+import com.rashid.abrar.repository.BookDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Autowired
-    private CommonRepository commonRepository;
+    private BookDao bookDao;
 
     @Override
     public void addAuthor(Author author) {
@@ -30,14 +32,17 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void removeAuthor(int id) {
         authorRepository.deleteById(id);
+
     }
 
 
     @Override
-    public List<Author> getAllAuthors() {
-        List <Author> authors = new ArrayList<>();
+    public List<Author> getAllAuthors(int pageNo, int pageSize, String sortBy) {
 
-        authorRepository.findAll()
+        List <Author> authors = new ArrayList<>();
+        Pageable paging = PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
+
+        authorRepository.findAll(paging)
                 .forEach(authors::add);
 
         return authors;
@@ -45,7 +50,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Book> getAllBooksByAuthorId(int id) {
-        return commonRepository.getAllBooksbyAuthorId(id);
+        return bookDao.getAllBooksbyAuthorId(id);
+
     }
 
     @Override

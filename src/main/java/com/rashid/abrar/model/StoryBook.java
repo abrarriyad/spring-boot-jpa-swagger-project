@@ -2,11 +2,13 @@ package com.rashid.abrar.model;
 
 import lombok.Data;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import static com.rashid.abrar.util.Constants.*;
 
 @Entity
 @Data
+@DiscriminatorValue(value = "story")
 public class StoryBook extends Book {
 
     private String genre;
@@ -17,5 +19,10 @@ public class StoryBook extends Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    @Override
+    public String getType() {
+        return STORY;
     }
 }

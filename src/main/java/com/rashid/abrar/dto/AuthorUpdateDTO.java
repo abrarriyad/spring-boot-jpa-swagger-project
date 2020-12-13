@@ -5,22 +5,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class AuthorDTO {
+public class AuthorUpdateDTO {
 
-    @NotNull(message = "Id can't be null")
-    @Min(value = 1,message = "Id can't be 0")
-    private int id;
     private String name;
     @Email
     private String email;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
