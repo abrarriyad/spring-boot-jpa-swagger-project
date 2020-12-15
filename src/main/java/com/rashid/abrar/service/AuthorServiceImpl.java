@@ -1,32 +1,41 @@
 package com.rashid.abrar.service;
 
+import com.rashid.abrar.dto.AuthorDTO;
+import com.rashid.abrar.dto.AuthorUpdateDTO;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.repository.AuthorRepository;
-import com.rashid.abrar.repository.BookDao;
+import com.rashid.abrar.repository.BookDaoImpl;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.CharMatcher.any;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorRepository authorRepository;
-
-
     @Autowired
-    private BookDao bookDao;
+    private ModelMapper modelMapper;
+    @Autowired
+    private BookDaoImpl bookDaoImpl;
+
+
 
     @Override
-    public void addAuthor(Author author) {
+    public void addAuthor(AuthorDTO authorDto) {
+        Author author = modelMapper.map(authorDto, Author.class);
         authorRepository.save(author);
+
     }
 
     @Override
@@ -50,7 +59,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Book> getAllBooksByAuthorId(int id) {
-        return bookDao.getAllBooksbyAuthorId(id);
+        return bookDaoImpl.getAllBooksbyAuthorId(id);
 
     }
 
@@ -62,7 +71,19 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Author updateAuthor(@RequestBody Author author) {
+    public Author updateAuthor(int id, AuthorUpdateDTO authorDto) {
+
+        Author author = getAuthorById(id);
+
+        if(authorDto.getEmail() !=null){
+            author.setEmail(authorDto.getEmail());
+        }
+
+        if(authorDto.getEmail() !=null) {
+            author.setName(authorDto.getName());
+        }
+        author.setBooks(getAllBooksByAuthorId(id));
+
         return authorRepository.save(author);
     }
 
