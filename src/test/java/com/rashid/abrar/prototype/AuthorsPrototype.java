@@ -5,6 +5,7 @@ import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.model.StoryBook;
 import com.rashid.abrar.model.ThesisBook;
+import org.springframework.beans.support.PagedListHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +80,45 @@ public class AuthorsPrototype{
         authors.add(author2);
         authors.add(author3);
 
-        return authors;
+        return  authors;
 
     }
+    public static List<Author> pagableAuthorList(){
+        List<Author> authors = new ArrayList<>();
 
+        Author author1 = new Author();
+
+        author1.setId(1);
+        author1.setName("Humayun Ahmed");
+        author1.setEmail("humayun@gmail.com");
+        author1.setPk(0);
+        author1.setBooks(null);
+
+        Author author2 = new Author();
+
+        author2.setId(2);
+        author2.setName("Jafor Iqbal");
+        author2.setEmail("iqbal@gmail.com");
+        author2.setBooks(null);
+        author1.setPk(0);
+
+        Author author3 = new Author();
+
+        author3.setId(3);
+        author3.setName("Abdur Razzak");
+        author3.setEmail("abdur@gmail.com");
+        author3.setBooks(null);
+        author1.setPk(0);
+
+        authors.add(author1);
+        authors.add(author2);
+        authors.add(author3);
+
+        PagedListHolder page = new PagedListHolder(authors);
+        page.setPage(0);
+        page.setPageSize(10);
+
+        return  page.getPageList();
+
+    }
 }
