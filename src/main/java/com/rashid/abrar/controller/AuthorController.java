@@ -134,9 +134,9 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public Author updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
+    public void updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
 
-        return authorService.updateAuthor(id,authorDTO);
+        authorService.updateAuthor(id,authorDTO);
     }
 
 }

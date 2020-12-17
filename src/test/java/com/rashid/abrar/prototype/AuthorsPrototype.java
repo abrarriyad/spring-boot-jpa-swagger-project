@@ -1,6 +1,7 @@
 package com.rashid.abrar.prototype;
 
 import com.rashid.abrar.dto.AuthorDTO;
+import com.rashid.abrar.dto.AuthorUpdateDTO;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.model.StoryBook;
@@ -26,6 +27,14 @@ public class AuthorsPrototype{
         AuthorDTO authorDto = new AuthorDTO();
 
         authorDto.setId(1);
+        authorDto.setName("Humayun Ahmed");
+        authorDto.setEmail("humayun@gmail.com");
+        return authorDto;
+    }
+
+    public static AuthorUpdateDTO aUpdateDtoAuthor(){
+        AuthorUpdateDTO authorDto = new AuthorUpdateDTO();
+
         authorDto.setName("Humayun Ahmed");
         authorDto.setEmail("humayun@gmail.com");
         return authorDto;

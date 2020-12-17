@@ -8,7 +8,6 @@ public interface BookDao {
 
     List<Book> getAllBooksbyAuthorId(int id);
     List<Book> getAllBooksbyType(String type);
-    String getTypeOfBook(int id);
 
 
 }

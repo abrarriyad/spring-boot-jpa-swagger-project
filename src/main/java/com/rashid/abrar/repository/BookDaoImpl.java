@@ -51,20 +51,20 @@ public class BookDaoImpl implements BookDao {
 
     }
 
-    public String getTypeOfBook(int id){
-
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-        CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
-        Root<Book> from = query.from(Book.class);
-
-        query.select(from);
-        query.where(criteriaBuilder.equal(from.get("id"),id));
-
-        return  entityManager.createQuery(query).getSingleResult().getType();
-
-
-    }
+//    public String getTypeOfBook(int id){
+//
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//
+//        CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
+//        Root<Book> from = query.from(Book.class);
+//
+//        query.select(from);
+//        query.where(criteriaBuilder.equal(from.get("id"),id));
+//
+//        return  entityManager.createQuery(query).getSingleResult().getType();
+//
+//
+//    }
 
 
 }

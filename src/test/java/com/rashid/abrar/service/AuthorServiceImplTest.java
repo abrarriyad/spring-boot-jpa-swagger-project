@@ -18,14 +18,16 @@ import static org.mockito.ArgumentMatchers.any;
 import  com.rashid.abrar.prototype.AuthorsPrototype;
 import org.springframework.data.domain.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 import java.util.List;
-
 import static org.mockito.Mockito.*;
-
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +41,16 @@ public class AuthorServiceImplTest {
     private ModelMapper modelMapper;
     @Mock
     private BookDaoImpl bookDao;
+    @Mock
+    private CriteriaBuilder criteriaBuilder;
+    @Mock
+    private EntityManager entityManager;
+    @Mock
+    private CriteriaUpdate<Author> update;
+    @Mock
+    private Root<Author> authorRoot;
+    @Mock
+    private Query query;
 
 
     @Test
@@ -83,5 +95,25 @@ public class AuthorServiceImplTest {
         assertEquals(AuthorsPrototype.aAuthor().getId(), author.getId());
     }
 
+    @Test
+    public void testUpdateAuthorSuccess(){
 
+        when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
+        when(criteriaBuilder.createCriteriaUpdate(Author.class)).thenReturn(update);
+        when(update.from(Author.class)).thenReturn(authorRoot);
+        when(entityManager.createQuery(update)).thenReturn(query);
+        when(query.executeUpdate()).thenReturn(1);
+
+        int count = authorService.updateAuthor(1,AuthorsPrototype.aUpdateDtoAuthor());
+
+        assertEquals(1,count);
+
+    }
+    @Test
+    public void testDeleteAuthorSuccess(){
+        doNothing().when(authorRepository).deleteById(anyInt());
+        authorService.removeAuthor(1);
+
+        verify(authorRepository, times(1)).deleteById(isA(Integer.class));
+    }
 }

@@ -14,6 +14,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +36,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Autowired
     private BookDaoImpl bookDaoImpl;
 
-
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public void addAuthor(AuthorDTO authorDto) {
@@ -38,11 +46,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     }
 
-    @Override
-    public void removeAuthor(int id) {
-        authorRepository.deleteById(id);
-
-    }
 
 
     @Override
@@ -71,20 +74,32 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Author updateAuthor(int id, AuthorUpdateDTO authorDto) {
+    @Transactional
+    public int updateAuthor(int id, AuthorUpdateDTO authorDto) {
 
-        Author author = getAuthorById(id);
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
 
-        if(authorDto.getEmail() !=null){
-            author.setEmail(authorDto.getEmail());
+        CriteriaUpdate<Author> update = cb.createCriteriaUpdate(Author.class);
+
+        Root<Author> authorRoot = update.from(Author.class);
+
+        if(authorDto.getEmail()!=null) {
+            update.set(authorRoot.get("email"), authorDto.getEmail());
         }
-
-        if(authorDto.getEmail() !=null) {
-            author.setName(authorDto.getName());
+        if(authorDto.getName()!=null) {
+            update.set(authorRoot.get("name"), authorDto.getName());
         }
-        author.setBooks(getAllBooksByAuthorId(id));
+        Query query = entityManager.createQuery(update);
 
-        return authorRepository.save(author);
+       return query.executeUpdate();
+
+
+    }
+
+    @Override
+    public void removeAuthor(int id) {
+        authorRepository.deleteById(id);
+
     }
 
 

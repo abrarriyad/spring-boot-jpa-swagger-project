@@ -14,7 +14,7 @@ public interface AuthorService {
     List<Author> getAllAuthors(int pageNo, int pageSize,String sortBy);
     List<Book> getAllBooksByAuthorId(int id);
     Author getAuthorById(int id);
-    Author updateAuthor(int id, AuthorUpdateDTO author);
+    int updateAuthor(int id, AuthorUpdateDTO author);
 
 
 }

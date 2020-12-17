@@ -12,6 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +38,9 @@ public class BookServiceImpl  implements BookService{
     private BookDaoImpl bookDaoImpl;
 
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public Book getBook(int id) {
         return bookRepository.findById(id).orElse(null);
@@ -42,19 +51,19 @@ public class BookServiceImpl  implements BookService{
     public void addBook(int id,BookDTO bookDto,String type) {
         Author author =  authorService.getAuthorById(id);
 
-        if(type.equals(STORY)){
+        if(type.toLowerCase().trim().equals(STORY)){
 
             StoryBook sb = modelMapper.map(bookDto,StoryBook.class);
             sb.setAuthor(author);
             bookRepository.save(sb);
         }
-        else if(type.equals(THESIS)){
+        else if(type.toLowerCase().trim().equals(THESIS)){
 
             ThesisBook tb = modelMapper.map(bookDto, ThesisBook.class);
             tb.setAuthor(author);
             bookRepository.save(tb);
         }
-        else if(type.equals(JOURNAL)){
+        else if(type.toLowerCase().trim().equals(JOURNAL)){
 
             JournalBook jb = modelMapper.map(bookDto, JournalBook.class);
             jb.setAuthor(author);
@@ -78,53 +87,77 @@ public class BookServiceImpl  implements BookService{
     }
 
     @Override
-    public void updateBook(int id, BookUpdateDTO book) {
+    public void updateBook(int id, BookUpdateDTO bookDto) {
 
-        String type = bookDaoImpl.getTypeOfBook(id);
+//
+//        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+//
+//
+//        CriteriaUpdate<StoryBook> update = cb.createCriteriaUpdate(StoryBook.class);
+//
+//        Root<StoryBook> bookRoot = update.from(StoryBook.class);
+//
+//        if(book.getTitle()!=null) {
+//            update.set(bookRoot.get("title"), book.getTitle());
+//        }
+//        if (book.getTopic()!=null){
+//            update.set(bookRoot.get("topic"), book.getTopic());
+//
+//        }
+//        if(book.getGenre()!=null){
+//            update.set(bookRoot.get("genre"), book.getGenre());
+//        }
+//        if(book.getPublisher()!=null){
+//            update.set(bookRoot.get("publisher"), book.getPublisher());
+//        }
+//
+//        Query query = entityManager.createQuery(update);
+//
+//        return query.executeUpdate();
 
-        if(type.equals(STORY)){
-            StoryBook sb = (StoryBook) getBook(id);
 
-            if(book.getTitle()!=null)
-                sb.setTitle(book.getTitle());
+        Book book = getBook(id);
 
-            if(book.getGenre()!=null)
-                sb.setGenre(book.getGenre());
+        if(book.getType().equals(STORY)){
+            StoryBook sb = (StoryBook) book;
+
+            if(bookDto.getTitle()!=null)
+                sb.setTitle(bookDto.getTitle());
+
+            if(bookDto.getGenre()!=null)
+                sb.setGenre(bookDto.getGenre());
 
             bookRepository.save(sb);
 
         }
 
-        else if(type.equals(JOURNAL)){
+        else if(book.getType().equals(JOURNAL)){
 
-            JournalBook jb = (JournalBook) getBook(id);
+            JournalBook jb = (JournalBook) book;
 
-            if(book.getTitle()!=null)
-                jb.setTitle(book.getTitle());
+            if(bookDto.getTitle()!=null)
+                jb.setTitle(bookDto.getTitle());
 
-            if(book.getPublisher()!=null)
-                jb.setPublisher(book.getPublisher());
+            if(bookDto.getPublisher()!=null)
+                jb.setPublisher(bookDto.getPublisher());
 
 
             bookRepository.save(jb);
 
         }
 
-        else if(type.equals(THESIS) ){
+        else if(book.getType().equals(THESIS) ){
 
-            ThesisBook tb = (ThesisBook) getBook(id);
-            if(book.getTitle()!=null)
-                tb.setTitle(book.getTitle());
+            ThesisBook tb = (ThesisBook) book;
+            if(bookDto.getTitle()!=null)
+                tb.setTitle(bookDto.getTitle());
 
-            if(book.getTopic()!=null)
-                tb.setTopic(book.getTopic());
+            if(bookDto.getTopic()!=null)
+                tb.setTopic(bookDto.getTopic());
 
             bookRepository.save(tb);
 
-
         }
-
-
 
 
     }
