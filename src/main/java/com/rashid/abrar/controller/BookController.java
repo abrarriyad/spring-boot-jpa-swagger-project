@@ -88,9 +88,9 @@ public class BookController {
     @PostMapping("/{id}")
     public void addBook(
             @ApiParam(value = "Book type ('story' or 'thesis' or 'journal)")
-            @RequestParam(name = "type") String type,
             @Min(1)@PathVariable int id,
-            @Valid @RequestBody BookDTO bookDto){
+            @Valid @RequestBody BookDTO bookDto,
+            @RequestParam(name = "type") String type){
 
         bookService.addBook(id,bookDto,type);
 

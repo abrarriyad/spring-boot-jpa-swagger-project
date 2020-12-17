@@ -28,8 +28,6 @@ public class AuthorController {
 
     @Autowired
     AuthorService authorService;
-    @Autowired
-    BookService bookService;
 
 
     @GetMapping("/")
@@ -67,7 +65,7 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public Author getAuthorById(@Min(1) @PathVariable int id){
+    public Author getAuthorById(@PathVariable int id){
         return  authorService.getAuthorById(id);
     }
 
@@ -134,9 +132,9 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public void updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
+    public int updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
 
-        authorService.updateAuthor(id,authorDTO);
+       return authorService.updateAuthor(id,authorDTO);
     }
 
 }

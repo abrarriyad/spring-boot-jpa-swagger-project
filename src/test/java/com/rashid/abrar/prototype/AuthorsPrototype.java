@@ -58,6 +58,30 @@ public class AuthorsPrototype{
         return books;
     }
 
+    public static List<Book> storyBooks(){
+        List<Book> books = new ArrayList<>();
+
+        StoryBook storyBook = new StoryBook();
+
+        storyBook.setId(1);
+        storyBook.setGenre("Drama");
+        storyBook.setTitle("A Beautiful Mind");
+        storyBook.setAuthor(aAuthor());
+
+        StoryBook storyBook2 = new StoryBook();
+
+        storyBook2.setId(2);
+        storyBook2.setGenre("Romacne");
+        storyBook2.setTitle("Titanic");
+        storyBook2.setAuthor(aAuthor());
+
+
+        books.add(storyBook);
+        books.add(storyBook2);
+
+        return books;
+    }
+
     public static List<Author> authorList(){
         List<Author> authors = new ArrayList<>();
 
@@ -67,14 +91,14 @@ public class AuthorsPrototype{
         author1.setName("Humayun Ahmed");
         author1.setEmail("humayun@gmail.com");
         author1.setPk(0);
-        author1.setBooks(null);
+        author1.setBooks(bookList());
 
         Author author2 = new Author();
 
         author2.setId(2);
         author2.setName("Jafor Iqbal");
         author2.setEmail("iqbal@gmail.com");
-        author2.setBooks(null);
+        author2.setBooks(bookList());
         author1.setPk(0);
 
         Author author3 = new Author();
@@ -82,7 +106,7 @@ public class AuthorsPrototype{
         author3.setId(3);
         author3.setName("Abdur Razzak");
         author3.setEmail("abdur@gmail.com");
-        author3.setBooks(null);
+        author3.setBooks(bookList());
         author1.setPk(0);
 
         authors.add(author1);
