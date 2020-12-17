@@ -28,12 +28,8 @@ public class AuthorController {
 
     @Autowired
     AuthorService authorService;
-
     @Autowired
     BookService bookService;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
 
     @GetMapping("/")
@@ -105,9 +101,7 @@ public class AuthorController {
     })
     public void addAuthor(@Valid @RequestBody AuthorDTO authorDTO){
 
-        Author author = modelMapper.map(authorDTO, Author.class);
-
-        authorService.addAuthor(author);
+        authorService.addAuthor(authorDTO);
     }
 
 
@@ -140,20 +134,9 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public Author updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
+    public void updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
 
-        Author author = authorService.getAuthorById(id);
-
-        if(authorDTO.getEmail() !=null){
-            author.setEmail(authorDTO.getEmail());
-        }
-
-        if(authorDTO.getEmail() !=null) {
-            author.setName(authorDTO.getName());
-        }
-        author.setBooks(authorService.getAllBooksByAuthorId(id));
-
-        return authorService.updateAuthor(author);
+        authorService.updateAuthor(id,authorDTO);
     }
 
 }

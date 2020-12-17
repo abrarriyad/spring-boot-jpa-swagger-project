@@ -1,39 +1,51 @@
 package com.rashid.abrar.service;
 
+import com.rashid.abrar.dto.AuthorDTO;
+import com.rashid.abrar.dto.AuthorUpdateDTO;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.repository.AuthorRepository;
-import com.rashid.abrar.repository.BookDao;
+import com.rashid.abrar.repository.BookDaoImpl;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.CharMatcher.any;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorRepository authorRepository;
-
-
     @Autowired
-    private BookDao bookDao;
+    private ModelMapper modelMapper;
+    @Autowired
+    private BookDaoImpl bookDaoImpl;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
-    public void addAuthor(Author author) {
+    public void addAuthor(AuthorDTO authorDto) {
+        Author author = modelMapper.map(authorDto, Author.class);
         authorRepository.save(author);
-    }
-
-    @Override
-    public void removeAuthor(int id) {
-        authorRepository.deleteById(id);
 
     }
+
 
 
     @Override
@@ -50,7 +62,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Book> getAllBooksByAuthorId(int id) {
-        return bookDao.getAllBooksbyAuthorId(id);
+        return bookDaoImpl.getAllBooksbyAuthorId(id);
 
     }
 
@@ -62,8 +74,32 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Author updateAuthor(@RequestBody Author author) {
-        return authorRepository.save(author);
+    @Transactional
+    public int updateAuthor(int id, AuthorUpdateDTO authorDto) {
+
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+
+        CriteriaUpdate<Author> update = cb.createCriteriaUpdate(Author.class);
+
+        Root<Author> authorRoot = update.from(Author.class);
+
+        if(authorDto.getEmail()!=null) {
+            update.set(authorRoot.get("email"), authorDto.getEmail());
+        }
+        if(authorDto.getName()!=null) {
+            update.set(authorRoot.get("name"), authorDto.getName());
+        }
+        Query query = entityManager.createQuery(update);
+
+       return query.executeUpdate();
+
+
+    }
+
+    @Override
+    public void removeAuthor(int id) {
+        authorRepository.deleteById(id);
+
     }
 
 

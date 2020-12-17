@@ -23,6 +23,17 @@ public class Author {
     @Email
     private String email;
 
+    @Override
+    public String toString() {
+        return "Author{" +
+                "pk=" + pk +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", books=" + books +
+                '}';
+    }
+
     @JsonIgnore
     @OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL)
     private List books;
