@@ -1,6 +1,4 @@
 package com.rashid.abrar.dto;
-
-import com.rashid.abrar.model.Author;
 import lombok.*;
 
 import java.util.List;

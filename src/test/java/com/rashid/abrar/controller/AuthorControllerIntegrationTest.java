@@ -56,6 +56,7 @@ public class AuthorControllerIntegrationTest {
         ResponseEntity<Author[]> authorsListResponseEntity = this.restTemplate.getForEntity(builder.toUriString(), Author[].class);
 
         assertSame(HttpStatus.NO_CONTENT, authorsListResponseEntity.getStatusCode());
+        assertSame(null, authorsListResponseEntity.getBody());
 
     }
 

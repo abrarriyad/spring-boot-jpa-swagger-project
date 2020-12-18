@@ -9,7 +9,6 @@ import com.rashid.abrar.model.Book;
 import com.rashid.abrar.repository.AuthorRepository;
 import com.rashid.abrar.repository.BookDaoImpl;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +25,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.CharMatcher.any;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {

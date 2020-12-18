@@ -1,12 +1,6 @@
 package com.rashid.abrar.controller;
-import com.rashid.abrar.dto.AuthorDTO;
-import com.rashid.abrar.dto.AuthorUpdateDTO;
 import com.rashid.abrar.dto.BookDTO;
 import com.rashid.abrar.dto.BookUpdateDTO;
-import com.rashid.abrar.model.Author;
-import com.rashid.abrar.model.Book;
-import com.rashid.abrar.model.StoryBook;
-import com.rashid.abrar.prototype.AuthorsPrototype;
 import com.rashid.abrar.prototype.BookPrototype;
 import com.rashid.abrar.springbootapi.SpringBootApiApplication;
 import org.junit.jupiter.api.Test;
@@ -44,6 +38,8 @@ public class BookControllerIntegrationTest {
         ResponseEntity<BookDTO[]> booksListResponseEntity = this.restTemplate.getForEntity(builder.toUriString(), BookDTO[].class);
 
         assertEquals(HttpStatus.OK,booksListResponseEntity.getStatusCode());
+        assertEquals(BookPrototype.aBookDto().getId(), booksListResponseEntity.getBody()[0].getId());
+        assertEquals(1, booksListResponseEntity.getBody().length);
     }
     @Test
     public void testGetAllBooksWithoutParams_NO_CONTENT(){
@@ -51,6 +47,7 @@ public class BookControllerIntegrationTest {
         ResponseEntity<BookDTO[]> booksListResponseEntity = this.restTemplate.getForEntity(builder.toUriString(), BookDTO[].class);
 
         assertEquals(HttpStatus.NO_CONTENT,booksListResponseEntity.getStatusCode());
+        assertEquals(null, booksListResponseEntity.getBody());
     }
     @Test
     public void testGetAllBooksWithParams_OK(){
@@ -65,6 +62,8 @@ public class BookControllerIntegrationTest {
         ResponseEntity<BookDTO[]> booksListResponseEntity = this.restTemplate.getForEntity(builder.toUriString(), BookDTO[].class);
 
         assertEquals(HttpStatus.OK,booksListResponseEntity.getStatusCode());
+        assertEquals(BookPrototype.aBookDto().getId(), booksListResponseEntity.getBody()[0].getId());
+        assertEquals(1, booksListResponseEntity.getBody().length);
     }
 
     @Test
@@ -79,6 +78,7 @@ public class BookControllerIntegrationTest {
         ResponseEntity<BookDTO[]> booksListResponseEntity = this.restTemplate.getForEntity(builder.toUriString(), BookDTO[].class);
 
         assertEquals(HttpStatus.NO_CONTENT,booksListResponseEntity.getStatusCode());
+        assertEquals(null, booksListResponseEntity.getBody());
     }
 
 
@@ -107,6 +107,7 @@ public class BookControllerIntegrationTest {
         ResponseEntity<BookDTO> booksListResponseEntity = this.restTemplate.getForEntity(builder.toUriString(), BookDTO.class);
 
         assertEquals(HttpStatus.OK, booksListResponseEntity.getStatusCode());
+        assertEquals(BookPrototype.aBookDto().getId(), booksListResponseEntity.getBody().getId());
     }
     @Test
     public void testGETBookByAuthorId_NOT_FOUND(){
