@@ -1,9 +1,5 @@
 package com.rashid.abrar.dto;
-
-
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 public class AuthorUpdateDTO {
 

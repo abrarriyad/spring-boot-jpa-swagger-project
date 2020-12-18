@@ -2,7 +2,6 @@ package com.rashid.abrar.controller;
 
 import com.rashid.abrar.dto.BookDTO;
 import com.rashid.abrar.dto.BookUpdateDTO;
-import com.rashid.abrar.model.Book;
 import com.rashid.abrar.prototype.AuthorsPrototype;
 import com.rashid.abrar.prototype.BookPrototype;
 import com.rashid.abrar.repository.BookDaoImpl;
@@ -12,10 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;

@@ -3,8 +3,6 @@ package com.rashid.abrar.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rashid.abrar.model.Author;
 
-import javax.validation.constraints.NotNull;
-
 public class BookUpdateDTO {
 
     private String title;
