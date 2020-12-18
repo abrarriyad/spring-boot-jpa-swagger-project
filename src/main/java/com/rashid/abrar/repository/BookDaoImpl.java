@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -26,8 +27,9 @@ public class BookDaoImpl implements BookDao {
         CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
         Root<Book> from = query.from(Book.class);
         query.where(criteriaBuilder.equal(from.get("author"),id));
+        Query query1 = entityManager.createQuery(query);
 
-        return entityManager.createQuery(query).getResultList();
+        return query1.getResultList();
 
     }
     public List<Book> getAllBooksbyType(String type){
@@ -46,8 +48,9 @@ public class BookDaoImpl implements BookDao {
             query.where(criteriaBuilder.equal(from.type(), JournalBook.class));
         }
 
+        Query query1 = entityManager.createQuery(query);
 
-        return entityManager.createQuery(query).getResultList();
+        return query1.getResultList();
 
     }
 

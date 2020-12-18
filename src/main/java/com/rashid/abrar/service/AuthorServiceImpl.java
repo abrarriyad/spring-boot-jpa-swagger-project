@@ -2,6 +2,8 @@ package com.rashid.abrar.service;
 
 import com.rashid.abrar.dto.AuthorDTO;
 import com.rashid.abrar.dto.AuthorUpdateDTO;
+import com.rashid.abrar.exception.AuthorNotFoundException;
+import com.rashid.abrar.exception.IllegalAuthorException;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.repository.AuthorRepository;
@@ -41,6 +43,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void addAuthor(AuthorDTO authorDto) {
+        if(authorDto.getName().equals(null)){
+            throw new IllegalAuthorException();
+        }
         Author author = modelMapper.map(authorDto, Author.class);
         authorRepository.save(author);
 
@@ -75,7 +80,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public int updateAuthor(int id, AuthorUpdateDTO authorDto) {
+    public int updateAuthor(int id, AuthorUpdateDTO authorDto){
 
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
 
@@ -98,7 +103,13 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void removeAuthor(int id) {
-        authorRepository.deleteById(id);
+
+        if(authorRepository.existsById(id)) {
+            authorRepository.deleteById(id);
+        }
+        else {
+            throw new AuthorNotFoundException();
+        }
 
     }
 

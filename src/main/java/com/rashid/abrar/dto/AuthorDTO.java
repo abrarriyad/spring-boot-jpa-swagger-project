@@ -7,14 +7,7 @@ import javax.validation.constraints.NotNull;
 
 public class AuthorDTO {
 
-    @Override
-    public String toString() {
-        return "AuthorDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
+
 
     @NotNull(message = "Id can't be null")
     @Min(value = 1,message = "Id can't be 0")
