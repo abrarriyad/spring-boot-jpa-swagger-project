@@ -1,5 +1,6 @@
 package com.rashid.abrar.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Data;
 
 import javax.persistence.DiscriminatorValue;
@@ -10,6 +11,7 @@ import static com.rashid.abrar.util.Constants.*;
 @Entity
 @Data
 @DiscriminatorValue(value = "journal")
+@JsonAutoDetect
 public class JournalBook extends Book {
 
     private String publisher;

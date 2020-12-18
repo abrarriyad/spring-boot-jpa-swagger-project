@@ -10,9 +10,10 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -43,17 +44,29 @@ public class BookController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public List<Book>  getAllBooks(
+    public ResponseEntity< List<Book> > getAllBooks(
             @ApiParam(value = "Filter (can be 'story' or 'thesis' or 'journal )")
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(name = "type", required = false)  String type ){
+
+        List<Book> books = null;
+
         if(type!="" && type!=null){
 
-            return bookDaoImpl.getAllBooksbyType(type);
+             books = bookDaoImpl.getAllBooksbyType(type);
         }
-        return bookService.getAllBooks(pageNo,pageSize,sortBy);
+        else {
+            books = bookService.getAllBooks(pageNo, pageSize, sortBy);
+        }
+
+        if(books.isEmpty()){
+            return new ResponseEntity<List<Book> >(books, HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<List<Book> >(books, HttpStatus.OK);
+        }
     }
 
 
@@ -70,8 +83,14 @@ public class BookController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public Book getBookById(@PathVariable int id){
-        return  bookService.getBook(id);
+    public ResponseEntity<Book> getBookById(@PathVariable int id){
+        Book book = bookService.getBook(id);
+        if(book != null){
+            return new ResponseEntity<Book>(book, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<Book>(book, HttpStatus.NOT_FOUND);
+        }
     }
 
 
@@ -86,14 +105,18 @@ public class BookController {
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
     @PostMapping("/{id}")
-    public void addBook(
-            @ApiParam(value = "Book type ('story' or 'thesis' or 'journal)")
+    public ResponseEntity addBook(
             @Min(1)@PathVariable int id,
             @Valid @RequestBody BookDTO bookDto,
+            @ApiParam(value = "Book type ('story' or 'thesis' or 'journal)")
             @RequestParam(name = "type") String type){
 
-        bookService.addBook(id,bookDto,type);
-
+        try {
+            bookService.addBook(id, bookDto, type);
+            return new ResponseEntity(HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
     }
 
@@ -108,11 +131,15 @@ public class BookController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-
     @PutMapping("/{id}")
-    public void updateStoryBook(@PathVariable int id, @Valid @RequestBody BookUpdateDTO book){
+    public ResponseEntity updateStoryBook(@PathVariable int id, @Valid @RequestBody BookUpdateDTO book){
+        try{
 
-        bookService.updateBook(id,book);
+            bookService.updateBook(id,book);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
     }
 
@@ -128,8 +155,14 @@ public class BookController {
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
     @DeleteMapping("/{id}")
-    public void deleteBook(@Min(1)@PathVariable int id){
-         bookService.deleteBook(id);
+    public ResponseEntity deleteBook(@Min(1)@PathVariable int id){
+        try {
+            bookService.deleteBook(id);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity((HttpStatus.NOT_FOUND));
+
+        }
     }
 
 

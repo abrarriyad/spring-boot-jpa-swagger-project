@@ -1,5 +1,6 @@
 package com.rashid.abrar.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.Email;
 import java.util.List;
 
 @Entity
+@JsonAutoDetect
 public class Author {
 
     @Id
@@ -22,17 +24,6 @@ public class Author {
     @Column(unique = true)
     @Email
     private String email;
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "pk=" + pk +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", books=" + books +
-                '}';
-    }
 
     @JsonIgnore
     @OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL)

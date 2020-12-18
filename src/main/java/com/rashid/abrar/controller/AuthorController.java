@@ -6,17 +6,16 @@ import com.rashid.abrar.dto.AuthorUpdateDTO;
 import com.rashid.abrar.model.Author;
 import com.rashid.abrar.model.Book;
 import com.rashid.abrar.service.AuthorService;
-import com.rashid.abrar.service.BookService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 import static com.rashid.abrar.util.Constants.*;
@@ -43,12 +42,19 @@ public class AuthorController {
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
 
     })
-    public List<Author> getAllAuthors(
+    public ResponseEntity<List<Author>> getAllAuthors(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy
     ){
-        return authorService.getAllAuthors(pageNo,pageSize,sortBy);
+        List<Author> allAuthors = authorService.getAllAuthors(pageNo,pageSize,sortBy);
+        if(allAuthors.isEmpty()) {
+            return new ResponseEntity<List<Author>>(allAuthors, HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<List<Author>>(allAuthors, HttpStatus.OK);
+
+        }
     }
 
 
@@ -62,11 +68,17 @@ public class AuthorController {
             @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
             @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
             @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
-            @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public Author getAuthorById(@PathVariable int id){
-        return  authorService.getAuthorById(id);
+    public ResponseEntity<Author> getAuthorById(@PathVariable int id){
+       Author author = authorService.getAuthorById(id);
+
+       if(author != null){
+           return new ResponseEntity<Author>(author, HttpStatus.OK);
+       }
+       else{
+           return new ResponseEntity<Author>(author, HttpStatus.NOT_FOUND);
+       }
     }
 
 
@@ -82,8 +94,15 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public List<Book> getAllBooksByAuthorId(@Min(1) @PathVariable int id){
-        return authorService.getAllBooksByAuthorId(id);
+    public ResponseEntity< List<Book> > getAllBooksByAuthorId(@PathVariable int id){
+        List<Book> books = authorService.getAllBooksByAuthorId(id);
+
+        if(books.isEmpty()){
+            return new ResponseEntity<List<Book>>(books, HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<List<Book>>(books, HttpStatus.OK);
+        }
     }
 
 
@@ -97,9 +116,14 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public void addAuthor(@Valid @RequestBody AuthorDTO authorDTO){
+    public ResponseEntity addAuthor(@Valid @RequestBody AuthorDTO authorDTO){
+        try {
+            authorService.addAuthor(authorDTO);
+            return new ResponseEntity(HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
-        authorService.addAuthor(authorDTO);
     }
 
 
@@ -112,11 +136,19 @@ public class AuthorController {
             @ApiResponse(code = 200, message = SUCCESS_REQUEST, response = Author.class),
             @ApiResponse(code = 204, message = NO_AUTHOR_FOUND),
             @ApiResponse(code = 404, message = RESOURCE_NOT_FOUND_ERROR),
-            @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public void removeAuthor(@PathVariable int id){
-        authorService.removeAuthor(id);
+    public ResponseEntity removeAuthor(@PathVariable int id){
+        try {
+            authorService.removeAuthor(id);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        }catch (Exception e){
+
+            return new ResponseEntity((HttpStatus.NOT_FOUND));
+        }
+
+
     }
 
 
@@ -132,9 +164,18 @@ public class AuthorController {
             @ApiResponse(code = 404, message = BAD_REQUEST),
             @ApiResponse(code = 500, message = INTERNAL_SERVER_ERROR)
     })
-    public int updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
+    public ResponseEntity updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorUpdateDTO authorDTO){
 
-       return authorService.updateAuthor(id,authorDTO);
+      try{
+          int i = authorService.updateAuthor(id,authorDTO);
+          if(i>0)
+           return new ResponseEntity(HttpStatus.OK);
+          else
+              return new ResponseEntity(HttpStatus.NOT_FOUND);
+       }
+       catch (Exception e){
+           return new ResponseEntity(HttpStatus.BAD_REQUEST);
+       }
     }
 
 }

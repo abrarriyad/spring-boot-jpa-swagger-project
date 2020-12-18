@@ -35,8 +35,8 @@ public class AuthorsPrototype{
     public static AuthorUpdateDTO aUpdateDtoAuthor(){
         AuthorUpdateDTO authorDto = new AuthorUpdateDTO();
 
-        authorDto.setName("Humayun Ahmed");
-        authorDto.setEmail("humayun@gmail.com");
+        authorDto.setName("John Doe");
+        authorDto.setEmail("john@gmail.com");
         return authorDto;
     }
 
